@@ -1,12 +1,27 @@
 "use client";
 
 import TextGrid from './components/TextGrid';
+import { useState } from 'react';
+import { transpose } from 'chord-transposer';
 
 export default function Home() {
+  const [originalText, setOriginalText] = useState('');
+  const [transposedText, setTransposedText] = useState('');
+
   const keys = [
     'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
     'F#/G♭', 'G', 'G#/A♭', 'A', 'A#/B♭', 'B'
   ];
+
+  const handleTranspose = () => {
+    try {
+      const transposed = transpose(originalText).toKey('A');
+      setTransposedText(transposed.toString());
+    } catch (error) {
+      console.error('Transposition error:', error);
+      setTransposedText('Error transposing chords. Please check the format of your input.');
+    }
+  };
 
   return (
     <main>
@@ -39,18 +54,25 @@ export default function Home() {
             </option>
           ))}
         </select>
-        <button style={{
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '8px 16px',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}>
+        <button 
+          onClick={handleTranspose}
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
           Transpose
         </button>
       </div>
-      <TextGrid />
+      <TextGrid 
+        originalText={originalText}
+        setOriginalText={setOriginalText}
+        transposedText={transposedText}
+      />
     </main>
   );
 }

@@ -1,6 +1,12 @@
 "use client";
 
-export default function TextGrid() {
+interface TextGridProps {
+  originalText: string;
+  setOriginalText: (text: string) => void;
+  transposedText: string;
+}
+
+export default function TextGrid({ originalText, setOriginalText, transposedText }: TextGridProps) {
   return (
     <div style={{
       display: 'grid',
@@ -23,6 +29,8 @@ export default function TextGrid() {
           Original Song
         </label>
         <textarea 
+          value={originalText}
+          onChange={(e) => setOriginalText(e.target.value)}
           style={{
             width: '100%',
             height: 'calc(100vh - 160px)',
@@ -46,6 +54,8 @@ export default function TextGrid() {
           Transposed Song
         </label>
         <textarea 
+          value={transposedText}
+          readOnly
           style={{
             width: '100%',
             height: 'calc(100vh - 160px)',
@@ -54,7 +64,6 @@ export default function TextGrid() {
             borderRadius: '4px',
             resize: 'none',
           }}
-          readOnly
         />
       </div>
     </div>
