@@ -1,9 +1,10 @@
 "use client";
 
-import Image from 'next/image';
-import TextGrid from './components/TextGrid';
 import { useState } from 'react';
+import TextGrid from './components/TextGrid';
+import Image from 'next/image';
 import { transpose } from 'chord-transposer';
+import { jsPDF } from 'jspdf';
 
 export default function Home() {
   const [originalText, setOriginalText] = useState('');
@@ -22,6 +23,44 @@ export default function Home() {
     } catch (error) {
       console.error('Transposition error:', error);
       setTransposedText('Error transposing chords. Please check the format of your input.');
+    }
+  };
+
+  const handlePdfSave = async () => {
+    try {
+      // Create new PDF document
+      const doc = new jsPDF();
+      
+      // Add the transposed text to the PDF
+      doc.setFontSize(12);
+      
+      // Split text into lines and add them to PDF
+      const lines = transposedText.split('\n');
+      let y = 20;
+      lines.forEach(line => {
+        doc.text(line, 20, y);
+        y += 10;
+      });
+
+      // Get the PDF as blob
+      const pdfBlob = doc.output('blob');
+
+      // Show save file picker
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'transposed-song.pdf',
+        types: [{
+          description: 'PDF File',
+          accept: {'application/pdf': ['.pdf']},
+        }],
+      });
+
+      // Create a writable stream and write the blob to it
+      const writable = await handle.createWritable();
+      await writable.write(pdfBlob);
+      await writable.close();
+
+    } catch (error) {
+      console.error('Error generating PDF:', error);
     }
   };
 
@@ -82,7 +121,21 @@ export default function Home() {
         >
           Transpose
         </button>
+        <button 
+          onClick={handlePdfSave}
+          style={{
+            backgroundColor: '#e0e0e0',
+            color: '#333',
+            border: '1px solid #ccc',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          to pdf
+        </button>
       </div>
+
       <TextGrid 
         originalText={originalText}
         setOriginalText={setOriginalText}
