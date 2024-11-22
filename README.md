@@ -1,3 +1,19 @@
+# mobitrans mobile transposer
+## History
+## Author(s):
+ * Dawson Tennant
+## Technologies
+
+* npx to create a basic react app
+* cursor as the ai editor
+* npm packages: 
+  * chord-transposer
+  * react-file-picker
+  * chord-transposer
+* 
+
+The transposer icon and graphics are made by Dawson Tennant
+================= BOILER PLATE =======================
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
