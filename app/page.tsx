@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import TextGrid from './components/TextGrid';
 import { useState } from 'react';
 import { transpose } from 'chord-transposer';
@@ -7,6 +8,7 @@ import { transpose } from 'chord-transposer';
 export default function Home() {
   const [originalText, setOriginalText] = useState('');
   const [transposedText, setTransposedText] = useState('');
+  const [selectedKey, setSelectedKey] = useState('C');
 
   const keys = [
     'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
@@ -15,7 +17,7 @@ export default function Home() {
 
   const handleTranspose = () => {
     try {
-      const transposed = transpose(originalText).toKey('A');
+      const transposed = transpose(originalText).toKey(selectedKey);
       setTransposedText(transposed.toString());
     } catch (error) {
       console.error('Transposition error:', error);
@@ -37,17 +39,30 @@ export default function Home() {
         padding: '0 20px',
         gap: '12px',
       }}>
+        <Image
+          src="/transposer.png"
+          alt="Transposer icon"
+          width={48}
+          height={48}
+          style={{
+            marginRight: '8px'
+          }}
+        />
         <label style={{
           fontWeight: 'bold',
         }}>
           Select a key:
         </label>
-        <select style={{
-          padding: '6px',
-          borderRadius: '4px',
-          border: '1px solid #ccc',
-          marginRight: '16px',
-        }}>
+        <select 
+          value={selectedKey}
+          onChange={(e) => setSelectedKey(e.target.value)}
+          style={{
+            padding: '6px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            marginRight: '16px',
+          }}
+        >
           {keys.map((key) => (
             <option key={key} value={key}>
               {key}
