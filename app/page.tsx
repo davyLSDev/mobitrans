@@ -3,6 +3,11 @@
 import TextGrid from './components/TextGrid';
 
 export default function Home() {
+  const keys = [
+    'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
+    'F#/G♭', 'G', 'G#/A♭', 'A', 'A#/B♭', 'B'
+  ];
+
   return (
     <main>
       <div style={{
@@ -15,7 +20,25 @@ export default function Home() {
         display: 'flex',
         alignItems: 'center',
         padding: '0 20px',
+        gap: '12px',
       }}>
+        <label style={{
+          fontWeight: 'bold',
+        }}>
+          Select a key:
+        </label>
+        <select style={{
+          padding: '6px',
+          borderRadius: '4px',
+          border: '1px solid #ccc',
+          marginRight: '16px',
+        }}>
+          {keys.map((key) => (
+            <option key={key} value={key}>
+              {key}
+            </option>
+          ))}
+        </select>
         <button style={{
           backgroundColor: '#007bff',
           color: 'white',
