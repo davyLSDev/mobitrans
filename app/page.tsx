@@ -18,6 +18,7 @@ export default function Home() {
   const [transposedText, setTransposedText] = useState('');
   const [transpose, setTranspose] = useState<TransposeFunction | null>(null);
   const [showError, setShowError] = useState(false);
+  const [selectedKey, setSelectedKey] = useState('C');
 
   useEffect(() => {
     import('chord-transposer').then((module) => {
@@ -34,7 +35,7 @@ export default function Home() {
     }
     
     try {
-      const transposed = transpose(originalText).toKey('Bb');
+      const transposed = transpose(originalText).toKey(selectedKey);
       setTransposedText(transposed.toString());
     } catch (error) {
       console.error('Transposition error:', error);
@@ -61,14 +62,18 @@ export default function Home() {
         }}>
           Select a key:
         </label>
-        <select style={{
-          padding: '6px',
-          borderRadius: '4px',
-          border: '1px solid #ccc',
-          marginRight: '16px',
-        }}>
+        <select 
+          value={selectedKey}
+          onChange={(e) => setSelectedKey(e.target.value)}
+          style={{
+            padding: '6px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            marginRight: '16px',
+          }}
+        >
           {keys.map((key) => (
-            <option key={key} value={key}>
+            <option key={key} value={key.split('/')[0]}>
               {key}
             </option>
           ))}
