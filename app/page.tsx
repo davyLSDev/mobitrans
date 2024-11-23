@@ -1,12 +1,20 @@
 "use client";
 
 import TextGrid from './components/TextGrid';
+import { useState } from 'react';
 
 export default function Home() {
   const keys = [
     'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
     'F#/G♭', 'G', 'G#/A♭', 'A', 'A#/B♭', 'B'
   ];
+
+  const [originalText, setOriginalText] = useState('');
+  const [transposedText, setTransposedText] = useState('');
+
+  const handleTranspose = () => {
+    setTransposedText(originalText);
+  };
 
   return (
     <main>
@@ -39,18 +47,26 @@ export default function Home() {
             </option>
           ))}
         </select>
-        <button style={{
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '8px 16px',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}>
+        <button 
+          onClick={handleTranspose}
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
           Transpose
         </button>
       </div>
-      <TextGrid />
+      <TextGrid 
+        originalText={originalText}
+        setOriginalText={setOriginalText}
+        transposedText={transposedText}
+        setTransposedText={setTransposedText}
+      />
     </main>
   );
 }
