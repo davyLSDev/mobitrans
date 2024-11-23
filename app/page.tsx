@@ -28,24 +28,21 @@ export default function Home() {
 
   const handlePdfSave = async () => {
     try {
-      // Create new PDF document
       const doc = new jsPDF();
       
-      // Add the transposed text to the PDF
+      // Add content to PDF
       doc.setFontSize(12);
-      
-      // Split text into lines and add them to PDF
       const lines = transposedText.split('\n');
       let y = 20;
       lines.forEach(line => {
         doc.text(line, 20, y);
         y += 10;
       });
-
-      // Get the PDF as blob
+      
       const pdfBlob = doc.output('blob');
-
-      // Show save file picker
+      
+      // Type assertion to fix build error
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const handle = await (window as any).showSaveFilePicker({
         suggestedName: 'transposed-song.pdf',
         types: [{
@@ -53,12 +50,10 @@ export default function Home() {
           accept: {'application/pdf': ['.pdf']},
         }],
       });
-
-      // Create a writable stream and write the blob to it
+      
       const writable = await handle.createWritable();
       await writable.write(pdfBlob);
       await writable.close();
-
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
