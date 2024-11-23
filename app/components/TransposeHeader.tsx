@@ -2,6 +2,7 @@ interface TransposeHeaderProps {
     selectedKey: string;
     onKeyChange: (key: string) => void;
     onTranspose: () => void;
+    onGeneratePDF: () => void;
   }
   
   const keys = [
@@ -12,7 +13,8 @@ interface TransposeHeaderProps {
   export default function TransposeHeader({ 
     selectedKey, 
     onKeyChange, 
-    onTranspose 
+    onTranspose,
+    onGeneratePDF 
   }: TransposeHeaderProps) {
     return (
       <div style={{
@@ -60,6 +62,19 @@ interface TransposeHeaderProps {
           }}
         >
           Transpose
+        </button>
+        <button 
+          onClick={onGeneratePDF}
+          style={{
+            backgroundColor: '#6c757d',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          PDF
         </button>
       </div>
     );

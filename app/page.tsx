@@ -3,6 +3,7 @@
 import TextGrid from './components/TextGrid';
 import ErrorModal from './components/ErrorModal';
 import TransposeHeader from './components/TransposeHeader';
+import { generatePDF } from './components/PDFGenerator';
 import { useState, useEffect } from 'react';
 
 type TransposeFunction = (text: string) => {
@@ -39,12 +40,27 @@ export default function Home() {
     }
   };
 
+  const handleGeneratePDF = async () => {
+    if (!transposedText.trim()) {
+      setShowError(true);
+      return;
+    }
+
+    try {
+      await generatePDF(transposedText, selectedKey);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      // Optionally show an error message to the user
+    }
+  };
+
   return (
     <main>
       <TransposeHeader
         selectedKey={selectedKey}
         onKeyChange={setSelectedKey}
         onTranspose={handleTranspose}
+        onGeneratePDF={handleGeneratePDF}
       />
       <TextGrid 
         originalText={originalText}
