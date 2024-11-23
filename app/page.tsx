@@ -46,7 +46,7 @@ export default function Home() {
       const pdfBlob = doc.output('blob');
 
       // Show save file picker
-      const handle = await window.showSaveFilePicker({
+      const handle = await (window as any).showSaveFilePicker({
         suggestedName: 'transposed-song.pdf',
         types: [{
           description: 'PDF File',
