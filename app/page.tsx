@@ -1,7 +1,12 @@
 "use client";
 
 import TextGrid from './components/TextGrid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// Define the type for the transpose function
+type TransposeFunction = (text: string) => {
+  toKey: (key: string) => { toString: () => string }
+};
 
 export default function Home() {
   const keys = [
@@ -11,9 +16,24 @@ export default function Home() {
 
   const [originalText, setOriginalText] = useState('');
   const [transposedText, setTransposedText] = useState('');
+  const [transpose, setTranspose] = useState<TransposeFunction | null>(null);
+
+  useEffect(() => {
+    import('chord-transposer').then((module) => {
+      setTranspose(() => module.transpose);
+    });
+  }, []);
 
   const handleTranspose = () => {
-    setTransposedText(originalText);
+    if (!transpose) return;
+    
+    try {
+      const transposed = transpose(originalText).toKey('Bb');
+      setTransposedText(transposed.toString());
+    } catch (error) {
+      console.error('Transposition error:', error);
+      setTransposedText('Error transposing chords. Please check the format.');
+    }
   };
 
   return (
