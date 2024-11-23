@@ -16,6 +16,7 @@ export default function Home() {
   const [transpose, setTranspose] = useState<TransposeFunction | null>(null);
   const [showError, setShowError] = useState(false);
   const [selectedKey, setSelectedKey] = useState('C');
+  const [errorMessage, setErrorMessage] = useState('Please enter a song with chords in the Original Song pane');
 
   useEffect(() => {
     import('chord-transposer').then((module) => {
@@ -27,6 +28,7 @@ export default function Home() {
     if (!transpose) return;
     
     if (!originalText.trim()) {
+      setErrorMessage('Please enter a song with chords in the Original Song pane');
       setShowError(true);
       return;
     }
@@ -42,6 +44,7 @@ export default function Home() {
 
   const handleGeneratePDF = async () => {
     if (!transposedText.trim()) {
+      setErrorMessage('Please transpose a song before generating PDF');
       setShowError(true);
       return;
     }
@@ -50,7 +53,6 @@ export default function Home() {
       await generatePDF(transposedText, selectedKey);
     } catch (error) {
       console.error('PDF generation error:', error);
-      // Optionally show an error message to the user
     }
   };
 
@@ -71,7 +73,7 @@ export default function Home() {
       <ErrorModal 
         isOpen={showError}
         onClose={() => setShowError(false)}
-        message="Please enter a song with chords in the Original Song pane"
+        message={errorMessage}
       />
     </main>
   );
