@@ -1,22 +1,23 @@
 "use client";
 
 import TextGrid from './components/TextGrid';
+import ErrorModal from './components/ErrorModal';
 import { useState, useEffect } from 'react';
 
-// Define the type for the transpose function
+const keys = [
+  'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
+  'F#/G♭', 'G', 'G#/A♭', 'A', 'A#/B♭', 'B'
+];
+
 type TransposeFunction = (text: string) => {
   toKey: (key: string) => { toString: () => string }
 };
 
 export default function Home() {
-  const keys = [
-    'C', 'C#/D♭', 'D', 'D#/E♭', 'E', 'F',
-    'F#/G♭', 'G', 'G#/A♭', 'A', 'A#/B♭', 'B'
-  ];
-
   const [originalText, setOriginalText] = useState('');
   const [transposedText, setTransposedText] = useState('');
   const [transpose, setTranspose] = useState<TransposeFunction | null>(null);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     import('chord-transposer').then((module) => {
@@ -26,6 +27,11 @@ export default function Home() {
 
   const handleTranspose = () => {
     if (!transpose) return;
+    
+    if (!originalText.trim()) {
+      setShowError(true);
+      return;
+    }
     
     try {
       const transposed = transpose(originalText).toKey('Bb');
@@ -86,6 +92,11 @@ export default function Home() {
         setOriginalText={setOriginalText}
         transposedText={transposedText}
         setTransposedText={setTransposedText}
+      />
+      <ErrorModal 
+        isOpen={showError}
+        onClose={() => setShowError(false)}
+        message="Please enter a song with chords in the Original Song pane"
       />
     </main>
   );
