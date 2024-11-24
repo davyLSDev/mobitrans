@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
     "chord-transposer": "^3.0.9",
     "jspdf": "^2.5.2",
     "next": "15.0.3",
